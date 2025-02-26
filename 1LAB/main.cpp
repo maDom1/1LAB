@@ -5,7 +5,6 @@
 #include <iostream>
 #include <string>
 #include <cassert>
-#include <vector>
 #include <regex>
 #include <unordered_set>
 #include <sstream>
@@ -44,11 +43,15 @@ class Subscription {
 
     public:
         Subscription() : id(nextId++) {
-            cout << "Constructor called" << endl;
             objCount++;
         }
+
+        Subscription(const string &firstName, const string &lastName, const string &planType, const string &expiration, double price) 
+            : id(nextId++), firstName(firstName), lastName(lastName), planType(planType), expiration(expiration), price(price) {
+            objCount++;
+        }
+
         ~Subscription() {
-            cout << "Destructor called" << endl;
             objCount--;
         }
 
@@ -119,48 +122,26 @@ int Subscription::nextId = 0;
 int Subscription::objCount = 0;
 
 int main(int argc, char *argv[]) {
-    vector<Subscription*> subscriptions;
+    Subscription *sub[5];
 
     assert(Subscription::getObjectCount() == 0);
 
     Subscription *sub[5];
 
-    sub[0] = new Subscription();
-    sub[0]->setFirstName("John");
-    sub[0]->setLastName("Doe");
-    sub[0]->setPlanType("Basic");
-    sub[0]->setExpiration("2025-01-01");
-    sub[0]->setPrice(99.99);
-    subscriptions.push_back(sub[0]);
+    sub[0] = new Subscription("John", "Doe", "Basic", "2025-01-01", 99.99);
 
-    sub[1] = new Subscription();
-    sub[1]->setFirstName("Tony");
-    sub[1]->setLastName("Stark");
-    sub[1]->setPlanType("Premium");
-    sub[1]->setExpiration("2035-03-05");
-    sub[1]->setPrice(199.99);
-    subscriptions.push_back(sub[1]);
+    sub[1] = new Subscription("Tony", "Stark", "Premium", "2035-03-05", 199.99);
 
-    subscriptions.pop_back();
     delete sub[1];
+    sub[1] = nullptr;
 
     assert(Subscription::getObjectCount() == 1);
 
-    sub[2] = new Subscription();
-    sub[2]->setFirstName("Jonas");
-    sub[2]->setLastName("Jonaitis");
-    sub[2]->setPlanType("Basic");
-    sub[2]->setExpiration("2025-02-27");
-    sub[2]->setPrice(0.99);
-    subscriptions.push_back(sub[2]);
+    sub[2] = new Subscription("Jonas", "Jonaitis", "Basic", "2025-02-27", 0.99);
 
-    sub[3] = new Subscription();
-    sub[3]->setFirstName("Petras");
-    sub[3]->setLastName("Petraitis");
-    sub[3]->setPlanType("Premium");
-    sub[3]->setExpiration("2028-02-28");
-    sub[3]->setPrice(60);
-    subscriptions.push_back(sub[3]);
+    sub[1] = new Subscription("John", "Garry", "Basic", "2025-03-05", 2);
+
+    sub[3] = new Subscription("Petras", "Petraitis", "Premium", "2028-02-28", 60);
 
     assert(sub[3]->getId() == 3);
     assert(sub[3]->toString() == "Subscription ID: 3\n"
@@ -170,15 +151,8 @@ int main(int argc, char *argv[]) {
                                 "Expiration: 2028-02-28\n"
                                 "Price: 60\n");
 
-    sub[4] = new Subscription();
-    sub[4]->setFirstName("Goose");
-    sub[4]->setLastName("Fridge");
-    sub[4]->setPlanType("Premium");
-    sub[4]->setExpiration("2099-09-09");
-    sub[4]->setPrice(1284.99);
-    subscriptions.push_back(sub[4]);
+    sub[4] = new Subscription("Goose", "Fridge", "Premium", "2099-09-09", 1284.99);
 
-    // Assert values
     assert(sub[0]->getId() == 0);
     assert(sub[0]->getFirstName() == "John");
     assert(sub[0]->getLastName() == "Doe");
@@ -204,8 +178,10 @@ int main(int argc, char *argv[]) {
     assert(sub[4]->getExpiration() == "2099-09-09");
     assert(sub[4]->getPrice() == 1284.99);
 
-    for(auto sub : subscriptions) {
-        delete sub;
+    for(int i = 0; i < 5; ++i) {
+        if(sub[i] != nullptr) {
+            delete sub[i];
+        }
     }
 
     assert(Subscription::getObjectCount() == 0);
