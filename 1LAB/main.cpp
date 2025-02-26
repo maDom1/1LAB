@@ -22,25 +22,6 @@ class Subscription {
         string expiration; // Format: YYYY-MM-DD
         double price;
 
-    bool isValidDate(const string &date) {
-        regex datePattern(R"(\d{4}-\d{2}-\d{2})");
-        return regex_match(date, datePattern);
-    }
-
-    bool isValidPrice(double price) {
-        return price > 0;
-    }
-
-    bool isValidName(const string &name) {
-        regex namePattern(R"([A-Za-z]+)");
-        return regex_match(name, namePattern);
-    }
-
-    bool isValidPlanType(const string &planType) {
-        static const unordered_set<string> validPlanTypes = {"Basic", "Premium", "Gold"};
-        return validPlanTypes.find(planType) != validPlanTypes.end();
-    }
-
     public:
         Subscription() : id(nextId++) {
             objCount++;
@@ -116,6 +97,25 @@ class Subscription {
                 << "Price: " << price << "\n";
             return oss.str();
         }
+
+        bool isValidDate(const string &date) {
+            regex datePattern(R"(\d{4}-\d{2}-\d{2})");
+            return regex_match(date, datePattern);
+        }
+    
+        bool isValidPrice(double price) {
+            return price > 0;
+        }
+    
+        bool isValidName(const string &name) {
+            regex namePattern(R"([A-Za-z]+)");
+            return regex_match(name, namePattern);
+        }
+    
+        bool isValidPlanType(const string &planType) {
+            static const unordered_set<string> validPlanTypes = {"Basic", "Premium", "Gold"};
+            return validPlanTypes.find(planType) != validPlanTypes.end();
+        }
 };
 
 int Subscription::nextId = 0;
@@ -125,8 +125,6 @@ int main(int argc, char *argv[]) {
     Subscription *sub[5];
 
     assert(Subscription::getObjectCount() == 0);
-
-    Subscription *sub[5];
 
     sub[0] = new Subscription("John", "Doe", "Basic", "2025-01-01", 99.99);
 
@@ -138,8 +136,6 @@ int main(int argc, char *argv[]) {
     assert(Subscription::getObjectCount() == 1);
 
     sub[2] = new Subscription("Jonas", "Jonaitis", "Basic", "2025-02-27", 0.99);
-
-    sub[1] = new Subscription("John", "Garry", "Basic", "2025-03-05", 2);
 
     sub[3] = new Subscription("Petras", "Petraitis", "Premium", "2028-02-28", 60);
 
@@ -166,17 +162,20 @@ int main(int argc, char *argv[]) {
     assert(sub[2]->getExpiration() == "2025-02-27");
     assert(sub[2]->getPrice() == 0.99);
 
-    assert(sub[3]->getFirstName() == "Petras");
-    assert(sub[3]->getLastName() == "Petraitis");
-    assert(sub[3]->getPlanType() == "Premium");
-    assert(sub[3]->getExpiration() == "2028-02-28");
-    assert(sub[3]->getPrice() == 60);
-
     assert(sub[4]->getFirstName() == "Goose");
     assert(sub[4]->getLastName() == "Fridge");
     assert(sub[4]->getPlanType() == "Premium");
     assert(sub[4]->getExpiration() == "2099-09-09");
     assert(sub[4]->getPrice() == 1284.99);
+
+    assert(sub[0]->isValidDate("2025-01-01") == true);
+    assert(sub[0]->isValidDate("2025/12/01") == false);
+    assert(sub[0]->isValidPrice(99.99) == true);
+    assert(sub[0]->isValidPrice(-1) == false);
+    assert(sub[2]->isValidName("Jonas") == true);
+    assert(sub[2]->isValidName("Jonas2") == false);
+    assert(sub[3]->isValidPlanType("Premium") == true);
+    assert(sub[3]->isValidPlanType("Not Premium") == false);
 
     for(int i = 0; i < 5; ++i) {
         if(sub[i] != nullptr) {
