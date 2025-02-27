@@ -24,11 +24,24 @@ class Subscription {
 
     public:
         Subscription() : id(nextId++) {
+            firstName = "Unknown";
+            lastName = "Unknown";
+            planType = "Basic";
+            expiration = "0000-00-00";
+            price = 0.0;
             objCount++;
         }
 
-        Subscription(const string &firstName, const string &lastName, const string &planType, const string &expiration, double price) 
-            : id(nextId++), firstName(firstName), lastName(lastName), planType(planType), expiration(expiration), price(price) {
+        Subscription(string fN, string lN, string pT, string exp, double pr) : id(nextId++) {
+            firstName = fN;
+            lastName = lN;
+            planType = pT;
+            expiration = exp;
+            if(isValidPrice(pr)) {
+                price = pr;
+            } else {
+                cout << "Invalid price" << endl;
+            }
             objCount++;
         }
 
