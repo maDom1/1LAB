@@ -101,14 +101,14 @@ class Subscription {
         }
 
         string toString() const {
-            ostringstream oss;
-            oss << "Subscription ID: " << id << "\n"
+            stringstream ss;
+            ss << "Subscription ID: " << id << "\n"
                 << "First Name: " << firstName << "\n"
                 << "Last Name: " << lastName << "\n"
                 << "Plan Type: " << planType << "\n"
                 << "Expiration: " << expiration << "\n"
                 << "Price: " << price << "\n";
-            return oss.str();
+            return ss.str();
         }
 
         bool isValidDate(const string &date) {
