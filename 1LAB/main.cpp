@@ -37,11 +37,7 @@ class Subscription {
             lastName = lN;
             planType = pT;
             expiration = exp;
-            if(isValidPrice(pr)) {
-                price = pr;
-            } else {
-                cout << "Invalid price" << endl;
-            }
+            price = pr;
             objCount++;
         }
 
