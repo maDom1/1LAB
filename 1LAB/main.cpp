@@ -48,9 +48,6 @@ class Subscription {
         Subscription(string firstName, string lastName) : id(nextId++) {
             setFirstName(firstName);
             setLastName(lastName);
-            this->planType = "Free";
-            this->expiration = "Not Set";
-            this->price = 0.0;
             objCount++;
         }
 
