@@ -1,6 +1,4 @@
-//LSP - 2413982
-//El.pastas - dominykas.pavlavicius@mif.stud.vu.lt
-//Uzduotis - 1. Klasė 
+//Uzduotis - 1. Klasė Subscription
 
 #include <iostream>
 #include <string>
